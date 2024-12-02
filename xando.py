@@ -6,9 +6,10 @@ def display_board(board):
     print(f"{board[4]} | {board[5]} | {board[6]}")
     print("--+---+--")
     print(f"{board[1]} | {board[2]} | {board[3]}")
-test_board = ['#','X','O','X','O','X','O','X','O','']
+# test_board = ['#','X','O','X','O','X','O','X','O','']
+test= [str(i) for i in range(10)]
 
-# print(display_board(test_board))
+print(display_board(test))
 
 def player_input():
     player1=input("What do you want your input to be? X or O").upper()
@@ -58,9 +59,10 @@ def wincheck(board,mark):
 import random
 
 def first():
-    if random.randint(0,1) == 0:
+    x=random.randint(0,1)
+    if x == 0:
         return "Player 1"
-    elif random.randint(0,1) == 1:
+    elif x == 1:
         return "Player 2"
     
 # first()
@@ -98,7 +100,7 @@ def player_choice(board):
 
 
 def replay():
-    ans=input("Do you want to play again enter Y or N")
+    ans=input("Do you want to play again enter Y or N").upper()
 
     if ans == "Y":
         return True
@@ -112,11 +114,71 @@ def tic_tac_toe():
     while True:
         board=[""] * 10
 
+
         player1_m,player2_m=player_input()
 
         turn=first()
+        print(turn)
         print(f"{turn} will go first")
         play_game = input("Are you ready to play? Enter Y or N: ").upper()
         if play_game != "Y":
             break
+        game_on=True
+
+        while game_on:
+            if turn == "Player 1":
+                display_board(board)
+                try:
+                    position=int(input("Player 1, Choose your position(1-9):"))
+                except ValueError:
+                    position=int(input("Player 1, Choose your position(1-9):"))
+
+
+
+                if space_check(board,position):
+                    place_marker(board,player1_m[-1],position)
+
+                    if wincheck(board,player1_m[-1]):
+                        display_board(board)
+                        print("Congratulations! player 1 has won the game")
+                        game_on=False
+                    else:
+                        if not full_board_check(board):
+                            display_board(board)
+                            print("This game is a draw")
+                        else:
+                            turn="Player 2"
+                else:
+                    print("That position is not available. Please try another position")
+            else:
+                display_board(board)
+                try:
+                    position=int(input("Player 2, Choose your position(1-9)"))
+                except ValueError:
+                    position=int(input("Player 2, Choose your position(1-9)"))
+
+
+
+
+                if space_check(board,position):
+                    place_marker(board,player2_m[-1],position)
+
+                    if wincheck(board,player2_m[-1]):
+                        display_board(board)
+                        print("Congratulations! Player 2 has won the game")
+                        game_on=False
+                    else:
+                        if not full_board_check(board):
+                            display_board(board)
+                            print("This game is a draw")
+                        else:
+                            turn="Player 1"
+                else:
+                    print("That position is not available. Please try another position")
+        if not replay():
+            print("Thanks for playing")
+            break
+
+
+            
 tic_tac_toe()
